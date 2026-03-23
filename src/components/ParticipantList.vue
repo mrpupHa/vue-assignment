@@ -1,13 +1,18 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 // 1. ประกาศตัวแปร name มีค่าเริ่มต้นเป็น ""
-
+const name = ref("");
 // 2. ประกาศตัวแปร participants เป็น Array เปล่าสำหรับเก็บค่า input name
-
+const participants = ref([]);
 // 3. สร้างฟังก์ชันสำหรับเพิ่ม name เข้า participants ตอนที่กดปุ่ม
 const addParticipant = () => {
   // เริ่มเขียนโค้ดตรงนี้
+  participants.value.push(name.value);
+  name.value = "";
 };
+watch(participants, (participants) => {
+  console.log;
+});
 </script>
 
 export default
@@ -15,29 +20,34 @@ export default
   <div class="assignment-container">
     <h2>รายชื่อผู้เข้าร่วมกิจกรรม</h2>
     <!-- 4. ใช้ v-model เพื่อเก็บค่า input -->
-    <input placeholder="กรอกชื่อผู้เข้าร่วม" />
+    <input v-model="name" placeholder="กรอกข้อมูลผู้เข้าร่วม" />
     <!-- 5. ใช้ @click เพื่อเรียกใช้ addParticipant ตอนกดปุ่ม -->
-    <button>เพิ่มชื่อ</button>
+    <button @click="addParticipant">เพิ่มชื่อ</button>
 
     <div class="participant-list">
       <!-- 6. เขียน v-if เพื่อแสดงข้อความ "ยังไม่มีผู้เข้าร่วม" เมื่อไม่มีสมาชิกใน participants -->
-      <p>ยังไม่มีผู้เข้าร่วม</p>
+      <p v-if="participants.length === 0">ยังไม่มีผู้เข้าร่วม</p>
       <!-- 7. เขียน v-else เพื่อแสดง <li> ถ้ามีสมาชิกใน participants -->
-      <ul>
+      <ul v-else>
         <!-- 8. เขียน v-for เพื่อลูปและแสดงรายชื่อทั้งหมดใน participants -->
-        <li></li>
+        <li v-for="(person, index) in participants" :ket="index">
+          {{ person }}
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
 <style scoped>
+li {
+  color: beige;
+}
 .assignment-container {
   max-width: 400px;
   margin: auto;
   padding: 12px;
   border-radius: 8px;
-  background: #f9f9f9;
+  background: gray;
 }
 button {
   margin-left: 8px;
